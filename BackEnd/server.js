@@ -44,12 +44,12 @@ app.use("/api/posts", postRoutes);
 app.use("/api/notifications", notificationsRoutes);
 
 
-if (process.env.NODE_ENV === "production") {
-    app.use(express.static(path.join(__dirname, "dist")));
-    app.get("/*splat", (req, res) => {
-        res.sendFile(path.resolve(__dirname, "dist", "index.html"));
-    });
-}
+// if (process.env.NODE_ENV === "production" && !process.env.VERCEL) {
+//     app.use(express.static(path.join(__dirname, "dist")));
+//     app.get("/*splat", (req, res) => {
+//         res.sendFile(path.resolve(__dirname, "dist", "index.html"));
+//     });
+// }
 
 const startServer = async () => {
     try {
