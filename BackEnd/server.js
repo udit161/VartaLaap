@@ -45,9 +45,9 @@ app.use("/api/notifications", notificationsRoutes);
 
 
 if (process.env.NODE_ENV === "production") {
-    app.use(express.static(path.join(__dirname, "/FrontEnd/Vartalaap/dist")));
+    app.use(express.static(path.join(__dirname, "dist")));
     app.get("/*splat", (req, res) => {
-        res.sendFile(path.resolve(__dirname, "FrontEnd", "Vartalaap", "dist", "index.html"));
+        res.sendFile(path.resolve(__dirname, "dist", "index.html"));
     });
 }
 
