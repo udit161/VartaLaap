@@ -52,10 +52,18 @@ if (process.env.NODE_ENV === "production") {
 }
 
 const startServer = async () => {
-    await connectMongoDB();
-    app.listen(PORT, () => {
-        console.log(`server is running on port ${PORT}`);
-    });
+    try {
+        await connectMongoDB();
+        if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
+            app.listen(PORT, () => {
+                console.log(`server is running on port ${PORT}`);
+            });
+        }
+    } catch (err) {
+        console.error("Failed to connect to MongoDB", err);
+    }
 };
 
 startServer();
+
+export default app;
