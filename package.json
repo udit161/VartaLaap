@@ -4,8 +4,9 @@
   "description": "",
   "main": "BackEnd/server.js",
   "scripts": {
-    "dev": "nodemon BackEnd/server.js",
-    "start": "node BackEnd/server.js"
+    "dev": "cross-env NODE_ENV=development nodemon BackEnd/server.js",
+    "start": "cross-env NODE_ENV=production node BackEnd/server.js",
+    "build": "npm install && npm install --prefix FrontEnd/Vartalaap && npm run build --prefix FrontEnd/Vartalaap "
   },
   "type": "module",
   "keywords": [],
@@ -25,6 +26,7 @@
     "tailwindcss": "^4.2.2"
   },
   "devDependencies": {
+    "cross-env": "^10.1.0",
     "daisyui": "^5.5.19",
     "nodemon": "^3.1.14"
   }
