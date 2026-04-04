@@ -46,10 +46,17 @@ const SignInPage = () => {
                 }),
             });
 
-            const data = await res.json();
+            const contentType = res.headers.get("content-type");
+            let data;
+            if (contentType && contentType.includes("application/json")) {
+                data = await res.json();
+            } else {
+                const text = await res.text();
+                throw new Error(text || 'Server error occurred');
+            }
 
             if (!res.ok) {
-                throw new Error(data.error || 'Registration failed');
+                throw new Error(data?.error || 'Registration failed');
             }
 
             queryClient.invalidateQueries({ queryKey: ["authUser"] });

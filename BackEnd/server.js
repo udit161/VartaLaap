@@ -16,7 +16,7 @@ import path from "path";
 
 
 dotenv.config();
-dns.setServers(["1.1.1.1", "8.8.8.8"]);
+// dns.setServers(["1.1.1.1", "8.8.8.8"]); Removed as it can crash in serverless environments like Vercel
 cloudinary.config({
 
     cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -32,7 +32,7 @@ const __dirname = path.resolve();
 // console.log(process.env.MONGO_URI);
 
 app.use(cors({
-    origin: "http://localhost:3000",
+    origin: true, // Allow all origins in production to avoid CORS issues with Vercel domains
     credentials: true,
 }));
 app.use(express.json({ limit: "5mb" }));
