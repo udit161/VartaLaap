@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { DashboardLayout } from "../home/HomePage";
 import "../home/homepage.css";
 import "./yourProfile.css";
@@ -11,23 +12,18 @@ const YourProfile = () => {
     const [saving, setSaving] = useState(false);
     const [error, setError] = useState("");
 
+    const queryClient = useQueryClient();
+    const { data: authUser } = useQuery({ queryKey: ["authUser"] });
+
     useEffect(() => {
-        const fetchProfile = async () => {
-            try {
-                const res = await fetch("/api/auth/me", { credentials: "include" });
-                if (res.ok) {
-                    const data = await res.json();
-                    setProfile(data);
-                    setEditData(data);
-                }
-            } catch (err) {
-                console.error("Error fetching profile:", err);
-            } finally {
-                setLoading(false);
-            }
-        };
-        fetchProfile();
-    }, []);
+        if (authUser) {
+            setProfile(authUser);
+            setEditData(authUser);
+            setLoading(false);
+        } else {
+            setLoading(false);
+        }
+    }, [authUser]);
 
     const handleSave = async () => {
         setSaving(true);
@@ -49,6 +45,7 @@ const YourProfile = () => {
             if (res.ok) {
                 setProfile({ ...profile, ...data });
                 setIsEditing(false);
+                queryClient.invalidateQueries({ queryKey: ["authUser"] });
             } else {
                 setError(data.error || "Failed to update profile");
             }
