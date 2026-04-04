@@ -1,0 +1,129 @@
+/* ── Peoples Page ── */
+.peoples-page-inner {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
+.peoples-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 12px;
+}
+
+.peoples-user-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: rgba(20, 24, 34, 0.4);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 14px 16px;
+  margin-bottom: 10px;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.peoples-user-card:hover {
+  transform: translateY(-2px);
+  background: rgba(30, 36, 50, 0.6);
+  border-color: rgba(255, 80, 80, 0.4);
+  box-shadow: 0 10px 20px rgba(255, 20, 20, 0.12);
+}
+
+.peoples-avatar {
+  font-size: 26px;
+  background: linear-gradient(180deg, rgba(255, 60, 60, 0.95), rgba(180, 0, 0, 0.95));
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  display: grid;
+  place-items: center;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.25);
+  flex-shrink: 0;
+}
+
+.peoples-user-info {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
+
+.peoples-user-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.peoples-user-handle {
+  font-size: 12px;
+  color: #ff9999;
+  margin-top: 1px;
+}
+
+.peoples-user-bio {
+  font-size: 11px;
+  color: #9ca3af;
+  margin-top: 3px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Action Buttons */
+.peoples-page-inner .peoples-action-btn {
+  border-radius: 999px;
+  padding: 5px 16px;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.2s ease;
+  flex-shrink: 0;
+  width: auto;
+  height: auto;
+  display: inline-block;
+  border: none;
+}
+
+.peoples-page-inner .peoples-action-btn.follow {
+  background: #ff1f1f;
+  color: #fff;
+  box-shadow: 0 3px 10px rgba(255, 31, 31, 0.4);
+}
+
+.peoples-page-inner .peoples-action-btn.follow:hover {
+  background: #e01818;
+  transform: translateY(-1px);
+  box-shadow: 0 5px 14px rgba(255, 0, 0, 0.5);
+}
+
+.peoples-page-inner .peoples-action-btn.unfollow {
+  background: rgba(255, 255, 255, 0.08);
+  color: #d1d5db;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.peoples-page-inner .peoples-action-btn.unfollow:hover {
+  background: rgba(255, 60, 60, 0.2);
+  color: #ff9999;
+  border-color: rgba(255, 80, 80, 0.4);
+}
+
+/* Empty State */
+.peoples-empty {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: #9ca3af;
+}
+
+.peoples-empty span {
+  font-size: 48px;
+  display: block;
+  margin-bottom: 12px;
+}
+
+.peoples-empty p {
+  font-size: 14px;
+}

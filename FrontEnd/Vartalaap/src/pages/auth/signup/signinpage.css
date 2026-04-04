@@ -1,0 +1,127 @@
+/* Glassmorphism container for registration fields */
+.signin-card {
+  position: relative;
+  z-index: 20;
+  width: 600px;
+  max-width: 90vw;
+  padding: 40px;
+  border-radius: 24px;
+  background: rgba(20, 20, 30, 0.4);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  margin-top: 100px;
+  margin-bottom: 40px;
+  max-height: 75vh;
+  overflow-y: auto;
+}
+
+.signin-card::-webkit-scrollbar {
+  width: 8px;
+}
+.signin-card::-webkit-scrollbar-thumb {
+  background: rgba(255, 31, 31, 0.5);
+  border-radius: 4px;
+}
+
+.input-row {
+  display: flex;
+  gap: 20px;
+  width: 100%;
+}
+
+.input-group {
+  flex: 1;
+  margin-bottom: 24px;
+  text-align: left;
+}
+
+.file-input-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 24px;
+  text-align: left;
+}
+
+.input-group label, .file-input-group label {
+  color: #9ca3af;
+  font-size: 14px;
+  margin-bottom: 8px;
+  display: block;
+  font-weight: bold;
+}
+
+.signin-input {
+  width: 100%;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  padding: 16px 20px;
+  color: #fff;
+  font-size: 16px;
+  outline: none;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+}
+
+textarea.signin-input {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.signin-input:focus {
+  border-color: #ff1f1f;
+  box-shadow: 0 0 15px rgba(255, 31, 31, 0.3);
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.signin-input::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.file-upload-box {
+  background: rgba(0,0,0,0.3);
+  border: 1px dashed rgba(255,255,255,0.3);
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.file-upload-box:hover {
+  border-color: #ff1f1f;
+  background: rgba(255,31,31,0.1);
+}
+
+.file-upload-box input[type="file"] {
+  display: none;
+}
+
+.register-btn {
+  background-color: #ff1f1f;
+  border-radius: 40px;
+  width: 100%;
+  padding: 14px 0;
+  font-weight: bold;
+  font-size: 18px;
+  color: white;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(255, 31, 31, 0.5);
+  transition: transform 0.2s, box-shadow 0.2s;
+  margin-top: 20px;
+}
+
+.register-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 25px rgba(255, 31, 31, 0.7);
+}
+
+.register-btn:active {
+  transform: translateY(0);
+}

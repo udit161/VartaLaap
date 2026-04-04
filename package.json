@@ -1,0 +1,31 @@
+{
+  "name": "vartalaap",
+  "version": "1.0.0",
+  "description": "",
+  "main": "BackEnd/server.js",
+  "scripts": {
+    "dev": "nodemon BackEnd/server.js",
+    "start": "node BackEnd/server.js"
+  },
+  "type": "module",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@tailwindcss/vite": "^4.2.2",
+    "@tanstack/react-query": "^5.96.2",
+    "bcryptjs": "^3.0.3",
+    "cloudinary": "^2.9.0",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.6",
+    "dotenv": "^17.3.1",
+    "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.3",
+    "mongoose": "^9.3.1",
+    "tailwindcss": "^4.2.2"
+  },
+  "devDependencies": {
+    "daisyui": "^5.5.19",
+    "nodemon": "^3.1.14"
+  }
+}
