@@ -139,8 +139,8 @@ export const getMe = async (req, res) => {
             bio: user.bio,
         });
     } catch (error) {
-        console.error("Error fetching user:", error);
-        res.status(500).json({ error: "Internal server error" });
+        console.error("Error fetching user:", error.message);
+        res.status(500).json({ error: process.env.NODE_ENV === 'development' ? error.message : "Internal server error" });
     }
 
 }

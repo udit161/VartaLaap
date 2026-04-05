@@ -59,7 +59,9 @@ const SignInPage = () => {
                 throw new Error(data?.error || 'Registration failed');
             }
 
-            queryClient.invalidateQueries({ queryKey: ["authUser"] });
+            const userData = { ...data };
+            delete userData.message;
+            queryClient.setQueryData(["authUser"], userData);
             navigate('/home');
         } catch (err) {
             setError(err.message);
