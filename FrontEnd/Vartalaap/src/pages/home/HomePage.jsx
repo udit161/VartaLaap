@@ -336,7 +336,7 @@ export const DashboardLayout = ({ children, hideSuggested = false }) => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["authUser"] });
-      navigate("/login");
+      navigate("/");
     },
   });
 

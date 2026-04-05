@@ -49,13 +49,13 @@ const App = () => {
                 <Route path='/signup' element={!authUser ? <SignUpPage /> : <Navigate to="/" />} />
                 <Route path='/signin' element={!authUser ? <SignInPage /> : <Navigate to="/" />} />
                 <Route path='/login' element={!authUser ? <LoginPage /> : <Navigate to="/" />} />
-                <Route path='/home' element={authUser ? <HomePage /> : <Navigate to="/login" />} />
-                <Route path='/notifications' element={authUser ? <NotificationPage /> : <Navigate to="/login" />} />
-                <Route path='/posts' element={authUser ? <PostPage /> : <Navigate to="/login" />} />
-                <Route path='/search' element={authUser ? <SearchPage /> : <Navigate to="/login" />} />
-                <Route path='/profile' element={authUser ? <YourProfile /> : <Navigate to="/login" />} />
-                <Route path='/user/:userId' element={authUser ? <OtherProfile /> : <Navigate to="/login" />} />
-                <Route path='/peoples' element={authUser ? <PeoplesPage /> : <Navigate to="/login" />} />
+                <Route path='/home' element={authUser ? <HomePage /> : <Navigate to="/" />} />
+                <Route path='/notifications' element={authUser ? <NotificationPage /> : <Navigate to="/" />} />
+                <Route path='/posts' element={authUser ? <PostPage /> : <Navigate to="/" />} />
+                <Route path='/search' element={authUser ? <SearchPage /> : <Navigate to="/" />} />
+                <Route path='/profile' element={authUser ? <YourProfile /> : <Navigate to="/" />} />
+                <Route path='/user/:userId' element={authUser ? <OtherProfile /> : <Navigate to="/" />} />
+                <Route path='/peoples' element={authUser ? <PeoplesPage /> : <Navigate to="/" />} />
                 <Route path='/about' element={<AboutPage />} />
             </Routes>
         </div>

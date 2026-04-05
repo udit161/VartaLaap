@@ -23,9 +23,7 @@
     "express": "^5.2.1",
     "jsonwebtoken": "^9.0.3",
     "mongoose": "^9.3.1",
-    "tailwindcss": "^4.2.2"
-  },
-  "devDependencies": {
+    "tailwindcss": "^4.2.2",
     "cross-env": "^10.1.0",
     "daisyui": "^5.5.19",
     "nodemon": "^3.1.14"
