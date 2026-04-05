@@ -1,1 +1,17 @@
-﻿import mongoose from 'mongoose'; import User from './models/user.Models.js'; mongoose.connect('mongodb+srv://udit56579_db_user:jksaVQF29pgC3EOb@cluster0.exb1oyp.mongodb.net/vartalaap?retryWrites=true&w=majority').then(async () => { try { const res = await User.deleteMany({ username: /test/i }); console.log('Deleted test users:', res.deletedCount); } catch (e) { console.error('Error:', e); } finally { mongoose.disconnect(); } });
+import mongoose from 'mongoose';
+import User from './models/user.Models.js';
+import dns from 'dns';
+
+dns.setServers(['1.1.1.1', '8.8.8.8']);
+
+mongoose.connect('mongodb+srv://udit56579_db_user:jksaVQF29pgC3EOb@cluster0.exb1oyp.mongodb.net/vartalaap?retryWrites=true&w=majority')
+    .then(async () => {
+        try {
+            const res = await User.deleteMany({ username: /test/i });
+            console.log('Deleted test users:', res.deletedCount);
+        } catch (e) {
+            console.error('Error:', e);
+        } finally {
+            mongoose.disconnect();
+        }
+    });
