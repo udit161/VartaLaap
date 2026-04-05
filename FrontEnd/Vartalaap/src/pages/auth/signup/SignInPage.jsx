@@ -78,10 +78,12 @@ const SignInPage = () => {
             width: '100vw',
             height: '100vh',
             display: 'flex',
-            justifyContent: 'center',
+            justifyContent: 'flex-start',
             alignItems: 'center',
+            flexDirection: 'column',
+            overflowY: 'auto',
             zIndex: 10,
-            background: '#0B0F19' // Fallback behind space bg
+            background: '#0B0F19'
         }}>
             <SpaceBackground />
             
@@ -96,11 +98,11 @@ const SignInPage = () => {
             </header>
 
             <div className="signin-card">
-                <div style={{ marginBottom: '30px', textAlign: 'center' }}>
-                    <h1 style={{ fontFamily: '"Bogam", sans-serif', color: '#ff1f1f', fontSize: '36px', fontWeight: '900', margin: '0', textShadow: '0 0 20px rgba(255,31,31,0.5)' }}>
+                <div style={{ marginBottom: '20px', textAlign: 'center' }}>
+                    <h1 style={{ fontFamily: '"Bogam", sans-serif', color: '#ff1f1f', fontSize: '32px', fontWeight: '900', margin: '0', textShadow: '0 0 20px rgba(255,31,31,0.5)' }}>
                         Create Your Account
                     </h1>
-                    <p style={{ color: '#9ca3af', marginTop: '10px' }}>Join the Vartalaap community today.</p>
+                    <p style={{ color: '#9ca3af', marginTop: '6px', fontSize: '14px' }}>Join the Vartalaap community today.</p>
                 </div>
 
                 {error && (

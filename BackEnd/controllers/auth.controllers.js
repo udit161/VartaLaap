@@ -111,10 +111,14 @@ export const login = async (req, res) => {
 
 export const logout = async (req, res) => {
     try {
+        const isProduction = process.env.NODE_ENV === "production";
         res.cookie("jwt", "", {
-
+            httpOnly: true,
             maxAge: 0,
-        })
+            sameSite: isProduction ? "none" : "lax",
+            secure: isProduction,
+            path: "/",
+        });
         res.status(200).json({ message: "Logout successful" });
     } catch (error) {
         console.error("Error during logout:", error);
