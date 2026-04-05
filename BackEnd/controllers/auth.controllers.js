@@ -60,7 +60,7 @@ export const signup = async (req, res) => {
 
     } catch (error) {
         console.error("Error during signup:", error);
-        res.status(500).json({ error: "Internal server error" });
+        res.status(500).json({ error: process.env.NODE_ENV === 'development' ? error.message : "Internal server error" });
 
     }
 }
@@ -91,6 +91,7 @@ export const login = async (req, res) => {
             message: "Login successful",
             _id: user._id,
             fullName: user.fullName,
+            username: user.username,
             email: user.email,
             followers: user.followers,
             following: user.following,
@@ -100,8 +101,8 @@ export const login = async (req, res) => {
         })
 
     } catch (error) {
-        console.log("Error during login", error.message);
-        res.status(500).json({ error: "Internal server error" });
+        console.log("Error during login:", error.message);
+        res.status(500).json({ error: process.env.NODE_ENV === 'development' ? error.message : "Internal server error" });
 
     }
 

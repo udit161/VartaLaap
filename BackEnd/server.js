@@ -16,7 +16,10 @@ import path from "path";
 
 
 dotenv.config();
-// dns.setServers(["1.1.1.1", "8.8.8.8"]); Removed as it can crash in serverless environments like Vercel
+if (process.env.NODE_ENV !== 'production') {
+    dns.setServers(["1.1.1.1", "8.8.8.8"]); // Helps resolve MongoDB Atlas SRV records in some environments
+}
+
 cloudinary.config({
 
     cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
