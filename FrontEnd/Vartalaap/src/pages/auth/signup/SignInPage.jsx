@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { SpaceBackground } from '../../../components/SpaceBackground';
 import { useQueryClient } from '@tanstack/react-query';
+import { GoogleLogin } from '@react-oauth/google';
 import './signinpage.css';
 
 const SignInPage = () => {
@@ -57,6 +58,41 @@ const SignInPage = () => {
 
             if (!res.ok) {
                 throw new Error(data?.error || 'Registration failed');
+            }
+
+            const userData = { ...data };
+            delete userData.message;
+            queryClient.setQueryData(["authUser"], userData);
+            navigate('/home');
+        } catch (err) {
+            setError(err.message);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    const handleGoogleSuccess = async (credentialResponse) => {
+        try {
+            setIsLoading(true);
+            setError('');
+            const res = await fetch('/api/auth/google', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'include',
+                body: JSON.stringify({ credential: credentialResponse.credential }),
+            });
+
+            const contentType = res.headers.get("content-type");
+            let data;
+            if (contentType && contentType.includes("application/json")) {
+                data = await res.json();
+            } else {
+                const text = await res.text();
+                throw new Error(text || 'Server error occurred');
+            }
+
+            if (!res.ok) {
+                throw new Error(data?.error || 'Google auth failed');
             }
 
             const userData = { ...data };
@@ -191,6 +227,22 @@ const SignInPage = () => {
                     <button type="submit" className="register-btn" disabled={isLoading}>
                         {isLoading ? 'Creating Account...' : 'Sign Up'}
                     </button>
+
+                    <div style={{ display: 'flex', alignItems: 'center', margin: '20px 0' }}>
+                        <div style={{ flex: 1, height: '1px', background: 'rgba(255,255,255,0.1)' }}></div>
+                        <span style={{ color: '#9ca3af', padding: '0 10px', fontSize: '14px' }}>OR</span>
+                        <div style={{ flex: 1, height: '1px', background: 'rgba(255,255,255,0.1)' }}></div>
+                    </div>
+                    
+                    <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '20px' }}>
+                        <GoogleLogin
+                            onSuccess={handleGoogleSuccess}
+                            onError={() => setError('Google Registration Failed')}
+                            theme="filled_black"
+                            text="continue_with"
+                            shape="pill"
+                        />
+                    </div>
 
                     <div style={{ textAlign: 'center', marginTop: '16px', color: '#9ca3af', fontSize: '14px', cursor: 'pointer' }}
                          onClick={() => navigate('/login')}>

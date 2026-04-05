@@ -1,6 +1,9 @@
 import User from "../models/user.Models.js";
 import bcrypt from "bcryptjs";
 import { generateTokenAndSetCookie } from "../lib/generateTokens.js";
+import { OAuth2Client } from "google-auth-library";
+
+const client = new OAuth2Client(process.env.Client_ID);
 
 export const signup = async (req, res) => {
     try {
@@ -152,3 +155,78 @@ export const getMe = async (req, res) => {
 
 
 
+export const googleAuth = async (req, res) => {
+    try {
+        const { credential } = req.body;
+        const ticket = await client.verifyIdToken({
+            idToken: credential,
+            audience: process.env.Client_ID,
+        });
+        
+        const payload = ticket.getPayload();
+        const { email, name, picture } = payload;
+        
+        // Check if user already exists
+        let user = await User.findOne({ email });
+        
+        if (user) {
+            // User exists, log them in
+            generateTokenAndSetCookie(user._id, res);
+            return res.status(200).json({
+                message: "Login successful",
+                _id: user._id,
+                fullName: user.fullName,
+                username: user.username,
+                email: user.email,
+                profileImg: user.profileImg,
+                followers: user.followers,
+                following: user.following,
+                coverImg: user.coverImg,
+                bio: user.bio,
+            });
+        }
+        
+        // User does not exist, create new account
+        // Generate a random secure password for the standard schema
+        const randomPassword = Math.random().toString(36).slice(-10) + Math.random().toString(36).slice(-8);
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(randomPassword, salt);
+        
+        // Generate a unique username based on the first part of their email
+        let baseUsername = email.split('@')[0].replace(/[^a-zA-Z0-9]/g, '');
+        let username = baseUsername;
+        let suffix = 1;
+        while (await User.findOne({ username })) {
+            username = `${baseUsername}${suffix}`;
+            suffix++;
+        }
+        
+        const newUser = new User({
+            fullName: name,
+            username,
+            email,
+            password: hashedPassword,
+            profileImg: picture,
+        });
+        
+        generateTokenAndSetCookie(newUser._id, res);
+        await newUser.save();
+        
+        return res.status(201).json({
+            message: "User registered successfully",
+            _id: newUser._id,
+            fullName: newUser.fullName,
+            username: newUser.username,
+            email: newUser.email,
+            profileImg: newUser.profileImg,
+            followers: newUser.followers,
+            following: newUser.following,
+            coverImg: newUser.coverImg,
+            bio: newUser.bio,
+        });
+
+    } catch (error) {
+        console.error("Error in googleAuth controller:", error.message);
+        return res.status(500).json({ error: "Internal Server Error" });
+    }
+};
