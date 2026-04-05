@@ -7,7 +7,17 @@ import Notification from "../models/notifications.models.js";
 export const getUserProfile = async (req, res) => {
     try {
         const { username } = req.params;
-        const user = await User.findOne({ username }).select("-password");
+        let user;
+        
+        // Try to find by username or by ID if it's a valid ObjectId
+        if (mongoose.Types.ObjectId.isValid(username)) {
+            user = await User.findById(username).select("-password");
+        } 
+        
+        if (!user) {
+            user = await User.findOne({ username }).select("-password");
+        }
+
         if (!user) {
             return res.status(404).json({ error: "User not found" });
         }
@@ -126,16 +136,16 @@ export const updateUserProfile = async (req, res) => {
         user.password = newPassword ? user.password : user.password;
         user.email = user.email;
 
-        user = await user.save();
+        const updatedUser = await user.save();
         return res.status(200).json({
             message: "Profile updated successfully",
-            _id: user._id,
-            fullName: user.fullName,
-            bio: user.bio,
-            projects: user.projects,
-            links: user.links,
-            profileImg: user.profileImg,
-            coverImg: user.coverImg
+            _id: updatedUser._id,
+            fullName: updatedUser.fullName,
+            bio: updatedUser.bio,
+            projects: updatedUser.projects,
+            links: updatedUser.links,
+            profileImg: updatedUser.profileImg,
+            coverImg: updatedUser.coverImg
         });
 
 
