@@ -2,10 +2,10 @@
   "name": "vartalaap",
   "version": "1.0.0",
   "description": "",
-  "main": "BackEnd/server.js",
+  "main": "BackEnd/src/server.js",
   "scripts": {
-    "dev": "cross-env NODE_ENV=development nodemon BackEnd/server.js",
-    "start": "cross-env NODE_ENV=production node BackEnd/server.js",
+    "dev": "cross-env NODE_ENV=development nodemon BackEnd/src/server.js",
+    "start": "cross-env NODE_ENV=production node BackEnd/src/server.js",
     "build": "npm install && npm install --prefix FrontEnd/Vartalaap && npm run build --prefix FrontEnd/Vartalaap "
   },
   "type": "module",
