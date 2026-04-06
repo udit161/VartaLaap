@@ -1,5 +1,5 @@
 import express from "express";
-import { getUserProfile, followUnfollowUser, updateUserProfile, getSuggestedUsers } from "../api/controllers/user.contollers.js";
+import { getUserProfile, followUnfollowUser, updateUserProfile, getSuggestedUsers } from "../controllers/user.contollers.js";
 import { protectRoute } from "../middleware/protectRoute.js";
 
 const router = express.Router();
