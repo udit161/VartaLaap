@@ -8,12 +8,12 @@ export const getUserProfile = async (req, res) => {
     try {
         const { username } = req.params;
         let user;
-        
+
         // Try to find by username or by ID if it's a valid ObjectId
         if (mongoose.Types.ObjectId.isValid(username)) {
             user = await User.findById(username).select("-password");
-        } 
-        
+        }
+
         if (!user) {
             user = await User.findOne({ username }).select("-password");
         }

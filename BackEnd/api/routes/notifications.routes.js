@@ -1,6 +1,6 @@
 import express from "express";
 import { protectRoute } from "../middleware/protectRoute.js";
-import { getNotifications, deleteNotification } from "../controllers/notification.controllers.js";
+import { getNotifications, deleteNotification } from "../api/controllers/notification.controllers.js";
 
 
 
