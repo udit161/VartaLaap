@@ -41,10 +41,18 @@ app.use(cors({
 app.use(express.json({ limit: "5mb" }));
 app.use(express.urlencoded({ extended: true }));// to parse the data
 app.use(cookieParser());
+
+// Connection middleware for Vercel serverless environment
+app.use(async (req, res, next) => {
+    await connectMongoDB();
+    next();
+});
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/posts", postRoutes);
 app.use("/api/notifications", notificationsRoutes);
+
+
 
 
 // if (process.env.NODE_ENV === "production" && !process.env.VERCEL) {
@@ -56,8 +64,8 @@ app.use("/api/notifications", notificationsRoutes);
 
 const startServer = async () => {
     try {
-        await connectMongoDB();
         if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
+            await connectMongoDB();
             app.listen(PORT, () => {
                 console.log(`server is running on port ${PORT}`);
             });
