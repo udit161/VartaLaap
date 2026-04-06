@@ -35,7 +35,7 @@ const __dirname = path.resolve();
 // console.log(process.env.MONGO_URI);
 
 app.use(cors({
-    origin: true, // Allow all origins in production to avoid CORS issues with Vercel domains
+    origin: 'https://vartalaap09.netlify.app',
     credentials: true,
 }));
 app.use(express.json({ limit: "5mb" }));
