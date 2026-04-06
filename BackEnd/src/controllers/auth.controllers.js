@@ -3,11 +3,21 @@ import bcrypt from "bcryptjs";
 import { generateTokenAndSetCookie } from "../lib/generateTokens.js";
 import { OAuth2Client } from "google-auth-library";
 
-const client = new OAuth2Client(process.env.Client_ID);
+const getClient = () => {
+    if (!process.env.Client_ID) {
+        throw new Error("FATAL: Client_ID environment variable is not set!");
+    }
+    return new OAuth2Client(process.env.Client_ID);
+};
 
 export const signup = async (req, res) => {
     try {
         const { fullName, username, email, password } = req.body;
+
+        // Validate all required fields exist
+        if (!fullName || !username || !email || !password) {
+            return res.status(400).json({ error: "All fields are required: fullName, username, email, password" });
+        }
 
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(email)) {
@@ -34,60 +44,48 @@ export const signup = async (req, res) => {
             username,
             email,
             password: hashedPassword,
-
         });
 
-        if (newUser) {
-            generateTokenAndSetCookie(newUser._id, res);
-            await newUser.save();
-            res.status(201).json({
-                message: "User registered successfully",
-                _id: newUser._id,
-                fullName: newUser.fullName,
-                username: newUser.username,
-                email: newUser.email,
-                followers: newUser.followers,
-                following: newUser.following,
-                profileImg: newUser.profileImg,
-                coverImg: newUser.coverImg,
-                bio: newUser.bio,
+        await newUser.save();
+        generateTokenAndSetCookie(newUser._id, res);
 
-            });
-
-        } else {
-            res.status(400).json({ error: "Failed to create user" });
-        }
-
-
-
-
+        res.status(201).json({
+            message: "User registered successfully",
+            _id: newUser._id,
+            fullName: newUser.fullName,
+            username: newUser.username,
+            email: newUser.email,
+            followers: newUser.followers,
+            following: newUser.following,
+            profileImg: newUser.profileImg,
+            coverImg: newUser.coverImg,
+            bio: newUser.bio,
+        });
 
     } catch (error) {
         console.error("Error during signup:", error);
-        res.status(500).json({ error: process.env.NODE_ENV === 'development' ? error.message : "Internal server error" });
-
+        // ALWAYS show the real error so we can debug
+        res.status(500).json({ error: "Signup failed: " + error.message });
     }
 }
+
 export const login = async (req, res) => {
     try {
-
         const { username, password } = req.body;
+
+        if (!username || !password) {
+            return res.status(400).json({ error: "Username and password are required" });
+        }
+
         const user = await User.findOne({ username });
         if (!user) {
-            return res.status(400).json({
-                error:
-                    "Invalid username or password"
-            });
+            return res.status(400).json({ error: "Invalid username or password" });
         }
 
         const isPasswordMatch = await bcrypt.compare(password, user?.password || "");
         if (!isPasswordMatch) {
-            return res.status(400).json({
-                error:
-                    "Invalid username or password"
-            });
+            return res.status(400).json({ error: "Invalid username or password" });
         }
-
 
         generateTokenAndSetCookie(user._id, res);
 
@@ -102,14 +100,12 @@ export const login = async (req, res) => {
             profileImg: user.profileImg,
             coverImg: user.coverImg,
             bio: user.bio,
-        })
+        });
 
     } catch (error) {
-        console.log("Error during login:", error.message);
-        res.status(500).json({ error: process.env.NODE_ENV === 'development' ? error.message : "Internal server error" });
-
+        console.error("Error during login:", error);
+        res.status(500).json({ error: "Login failed: " + error.message });
     }
-
 };
 
 export const logout = async (req, res) => {
@@ -125,7 +121,7 @@ export const logout = async (req, res) => {
         res.status(200).json({ message: "Logout successful" });
     } catch (error) {
         console.error("Error during logout:", error);
-        res.status(500).json({ error: "Internal server error" });
+        res.status(500).json({ error: "Logout failed: " + error.message });
     }
 };
 
@@ -147,17 +143,21 @@ export const getMe = async (req, res) => {
             bio: user.bio,
         });
     } catch (error) {
-        console.error("Error fetching user:", error.message);
-        res.status(500).json({ error: process.env.NODE_ENV === 'development' ? error.message : "Internal server error" });
+        console.error("Error fetching user:", error);
+        res.status(500).json({ error: "Failed to fetch user: " + error.message });
     }
-
 }
-
-
 
 export const googleAuth = async (req, res) => {
     try {
         const { credential } = req.body;
+
+        if (!credential) {
+            return res.status(400).json({ error: "Google credential token is required" });
+        }
+
+        const client = getClient();
+        
         const ticket = await client.verifyIdToken({
             idToken: credential,
             audience: process.env.Client_ID,
@@ -165,6 +165,10 @@ export const googleAuth = async (req, res) => {
         
         const payload = ticket.getPayload();
         const { email, name, picture } = payload;
+
+        if (!email) {
+            return res.status(400).json({ error: "Google account does not have an email address" });
+        }
         
         // Check if user already exists
         let user = await User.findOne({ email });
@@ -187,12 +191,11 @@ export const googleAuth = async (req, res) => {
         }
         
         // User does not exist, create new account
-        // Generate a random secure password for the standard schema
         const randomPassword = Math.random().toString(36).slice(-10) + Math.random().toString(36).slice(-8);
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(randomPassword, salt);
         
-        // Generate a unique username based on the first part of their email
+        // Generate a unique username
         let baseUsername = email.split('@')[0].replace(/[^a-zA-Z0-9]/g, '');
         let username = baseUsername;
         let suffix = 1;
@@ -202,15 +205,15 @@ export const googleAuth = async (req, res) => {
         }
         
         const newUser = new User({
-            fullName: name,
+            fullName: name || "Google User",
             username,
             email,
             password: hashedPassword,
-            profileImg: picture,
+            profileImg: picture || "",
         });
         
-        generateTokenAndSetCookie(newUser._id, res);
         await newUser.save();
+        generateTokenAndSetCookie(newUser._id, res);
         
         return res.status(201).json({
             message: "User registered successfully",
@@ -226,7 +229,7 @@ export const googleAuth = async (req, res) => {
         });
 
     } catch (error) {
-        console.error("Error in googleAuth controller:", error.message);
-        return res.status(500).json({ error: "Internal Server Error" });
+        console.error("Error in googleAuth controller:", error);
+        return res.status(500).json({ error: "Google auth failed: " + error.message });
     }
 };
