@@ -49,7 +49,7 @@ const YourProfile = () => {
             } else {
                 setError(data.error || "Failed to update profile");
             }
-        } catch (err) {
+        } catch {
             setError("Failed to update profile");
         } finally {
             setSaving(false);

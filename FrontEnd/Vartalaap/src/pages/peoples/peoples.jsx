@@ -52,7 +52,7 @@ const PeoplesPage = () => {
                                     const profileData = await profileRes.json();
                                     followedProfiles.push(profileData);
                                 }
-                            } catch (err) {
+                            } catch {
                                 // skip failed profile fetches
                             }
                         }

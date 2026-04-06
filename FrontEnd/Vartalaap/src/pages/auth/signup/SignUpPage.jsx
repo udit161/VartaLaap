@@ -29,7 +29,7 @@ const LogoGroup = ({ view }) => {
   );
 };
 
-const LoginForm = ({ view, toggleView }) => {
+const LoginForm = ({ view }) => {
   const navigate = useNavigate();
   const formClass = view === "login" ? "login" : "registers";
   return (
@@ -59,7 +59,7 @@ const LoginForm = ({ view, toggleView }) => {
   );
 };
 
-const RegisterForm = ({ view, toggleView }) => {
+const RegisterForm = ({ view }) => {
   const navigate = useNavigate();
   // For the register form to appear when "register" is selected, 
   // you might need it reversed or just depend on the css transition
@@ -92,11 +92,7 @@ const RegisterForm = ({ view, toggleView }) => {
 }
 
 export const SignUpPage = () => {
-  const [view, setView] = useState("login");
-  const toggleView = () => {
-    setView(view === "login" ? "register" : "login");
-  };
-
+  const [view] = useState("login");
   return (
     <div style={{
       position: 'fixed',
@@ -126,8 +122,8 @@ export const SignUpPage = () => {
         {/* We can keep or remove the internal logo. Let's keep it as part of the card animation, 
             or if the user meant replacing the internal logo with the round one: */}
         <LogoGroup view={view} />
-        <LoginForm view={view} toggleView={toggleView} />
-        <RegisterForm view={view} toggleView={toggleView} />
+        <LoginForm view={view} />
+        <RegisterForm view={view} />
       </div>
     </div>
   );
