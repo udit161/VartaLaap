@@ -36,9 +36,9 @@ cloudinary.config({
 const app = express();
 const PORT = process.env.PORT || 5001;
 
-// CORS: allow Netlify in production, localhost in development
+// CORS: allow the Render deployment URL and localhost in development
 const allowedOrigins = [
-    // Add your Render frontend URL here when you have it, e.g., 'https://your-app.onrender.com'
+    'https://vartalaap009.onrender.com',
     'http://localhost:5000',
     'http://localhost:5001',
 ];
@@ -70,6 +70,17 @@ app.use("/api/notifications", notificationsRoutes);
 app.get("/api/health", (req, res) => {
     res.status(200).json({ status: "ok", env: process.env.NODE_ENV });
 });
+
+// Serve frontend in production
+if (process.env.NODE_ENV === "production") {
+    const frontendDist = path.resolve(__dirname, "../../FrontEnd/Vartalaap/dist");
+    app.use(express.static(frontendDist));
+
+    // Catch-all: send index.html so React Router handles all non-API routes
+    app.get("*", (req, res) => {
+        res.sendFile(path.join(frontendDist, "index.html"));
+    });
+}
 
 const startServer = async () => {
     try {
