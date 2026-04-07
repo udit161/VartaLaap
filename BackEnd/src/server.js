@@ -38,7 +38,7 @@ const PORT = process.env.PORT || 5001;
 
 // CORS: allow Netlify in production, localhost in development
 const allowedOrigins = [
-    'https://vartalaap09.netlify.app',
+    // Add your Render frontend URL here when you have it, e.g., 'https://your-app.onrender.com'
     'http://localhost:5000',
     'http://localhost:5001',
 ];
@@ -59,16 +59,7 @@ app.use(express.json({ limit: "5mb" }));
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-// Connection middleware for Vercel serverless environment
-app.use(async (req, res, next) => {
-    try {
-        await connectMongoDB();
-        next();
-    } catch (err) {
-        console.error("MongoDB connection failed in middleware:", err);
-        res.status(500).json({ error: "Database connection failed: " + err.message });
-    }
-});
+
 
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
@@ -82,12 +73,10 @@ app.get("/api/health", (req, res) => {
 
 const startServer = async () => {
     try {
-        if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
-            await connectMongoDB();
-            app.listen(PORT, () => {
-                console.log(`server is running on port ${PORT}`);
-            });
-        }
+        await connectMongoDB();
+        app.listen(PORT, () => {
+            console.log(`server is running on port ${PORT}`);
+        });
     } catch (err) {
         console.error("Failed to connect to MongoDB", err);
     }
